@@ -13,7 +13,8 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'BMI Calculator',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.greenAccent),
         useMaterial3: true,
@@ -35,6 +36,13 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  var wtController = TextEditingController();
+  var htfController = TextEditingController();
+  var htinController = TextEditingController();
+
+  var result = " ";
+  var icon;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,7 +62,6 @@ class _MyHomePageState extends State<MyHomePage> {
               ),
             ],
           ),
-          actions: [IconButton(onPressed: () {}, icon: Icon(Icons.settings))],
         ),
         body: Center(
           child: SizedBox(
@@ -62,13 +69,22 @@ class _MyHomePageState extends State<MyHomePage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  "Calculate Your BMI",
-                  style: Myfont().copyWith(fontSize: 25),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.calculate_rounded),
+                    Text(
+                      "Calculate Your BMI",
+                      style: Myfont().copyWith(fontSize: 25),
+                    ),
+                  ],
                 ),
                 Gap(),
                 TextField(
+                  controller: wtController,
+                  keyboardType: TextInputType.numberWithOptions(),
                   decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.monitor_weight_rounded),
                       label: Text(
                         "Enter your Weight (in KG)",
                         style: Myfont(),
@@ -78,7 +94,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 Gap(),
                 TextField(
+                  controller: htfController,
+                  keyboardType: TextInputType.numberWithOptions(),
                   decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.height_rounded),
                       label: Text(
                         "Enter Your Height (in Feet)",
                         style: Myfont(),
@@ -88,7 +107,10 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 Gap(),
                 TextField(
+                  controller: htinController,
+                  keyboardType: TextInputType.numberWithOptions(),
                   decoration: InputDecoration(
+                      prefixIcon: Icon(Icons.height_rounded),
                       label: Text(
                         "Enter Your Height (in Inch)",
                         style: Myfont(),
@@ -105,6 +127,41 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     onPressed: () {
                       // Handle button press
+                      var wt = wtController.text.toString();
+                      var ft = htfController.text.toString();
+                      var inch = htinController.text.toString();
+
+                      if (wt != "" && ft != "" && inch != "") {
+                        var iwt = int.parse(wt);
+                        var ift = int.parse(ft);
+                        var iinch = int.parse(inch);
+
+                        var tinch = (ift * 12) + iinch;
+                        var hcm = tinch * 2.54;
+                        var hm = hcm / 100;
+
+                        var msg;
+
+                        var bmi = iwt / (hm * hm);
+
+                        if (bmi > 25) {
+                          msg = "You are Overweight";
+                        } else if (bmi < 18) {
+                          msg = "You are Underweight";
+                        } else {
+                          msg = "Perfect";
+                        }
+
+                        setState(() {
+                          result =
+                              "$msg.\n     Your BMI is ${bmi.toStringAsFixed(0)}";
+                        });
+                      } else {
+                        setState(() {
+                          result =
+                              "Please Enter All The Required Blanks to Calculate";
+                        });
+                      }
                     },
                     child: Text(
                       "Calculate",
@@ -114,8 +171,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 ),
                 Gap(),
                 Text(
-                  "data",
-                  style: Myfont(),
+                  result,
+                  style: Myfont().copyWith(fontSize: 16),
                 )
               ],
             ),
