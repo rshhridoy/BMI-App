@@ -39,7 +39,6 @@ class _MyHomePageState extends State<MyHomePage> {
   var htinController = TextEditingController();
 
   var result = " ";
-  var icon;
 
   @override
   Widget build(BuildContext context) {
@@ -138,7 +137,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         var hcm = tinch * 2.54;
                         var hm = hcm / 100;
 
-                        var msg;
+                        String msg;
 
                         var bmi = iwt / (hm * hm);
 
