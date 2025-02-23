@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:bmi_app/custom_widget/widgets.dart';
 import 'package:flutter/material.dart';
 
